@@ -37,7 +37,9 @@ async function fetchCommonRestaurants(restaurantNames) {
               process.env.NODE_ENV === "production"
                 ? process.env.PUPPETEER_EXECUTABLE_PATH
                 : puppeteer.executablePath(),
+                headless:true,
           });
+
 
         console.log('after launching browser')
         const page = await browser.newPage();
