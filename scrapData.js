@@ -27,16 +27,23 @@ async function fetchCommonRestaurants(restaurantNames) {
 
         // Launch Puppeteer browser instance
         const browser = await puppeteer.launch({
-              defaultViewport: {
-                width: 1700,
-                height: 800,
-              },
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        });
+            args: [
+              "--disable-setuid-sandbox",
+              "--no-sandbox",
+              "--single-process",
+              "--no-zygote",
+            ],
+            executablePath:
+              process.env.NODE_ENV === "production"
+                ? process.env.PUPPETEER_EXECUTABLE_PATH
+                : puppeteer.executablePath(),
+          });
 
         console.log('after launching browser')
         const page = await browser.newPage();
+
+        await page.setViewport({ width: 1080, height: 1024 });
+
 
         // Iterate over restaurant names
         for (const restaurantName of restaurantNames) {

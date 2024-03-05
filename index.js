@@ -16,7 +16,7 @@ const scrapRestaurant=async()=>{
 }
 
 
-app.use("/api/v1/scrap",scrapRestaurant)
+app.use("scrap",scrapRestaurant)
 
 // default route 
 app.use('/',(req,res)=>{
