@@ -1,11 +1,10 @@
 // Import required packages
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
-require('dotenv').config();
-const { magicpinUrls } = require('./dataSets/magicPinUrl');
 const { RestaurantNames } = require('./dataSets/restaurantNames');
 
 const fuzzball = require('fuzzball');
+
 
 // Entry point of the script
 exports.scrapRestaurantdata = async () => {

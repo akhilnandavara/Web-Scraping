@@ -1,25 +1,13 @@
 const express=require('express')
 const app=express()
-const cors=require('cors');
-const cron = require('node-cron'); // Required node-cron and moment-timezone for scheduling tasks
-const moment = require('moment-timezone');
-
-const categoryRoute=require('./routes/Category')
-const restaurantRoute=require('./routes/Restaurant')
-
-const { fetchRestaurantUpdatedData } = require('./fetchRestaurantUpdatedData');
-const { dbConnect } = require('./mongoDBHelper');
 const { scrapRestaurantdata } = require('./scrapData');
-require('dotenv').config();
+
+
 
 const PORT=process.env.PORT||4000;
 
 app.use(express.json());// json parser
 
-
-
-// connect to db
-dbConnect()
 
 
 const scrapRestaurant=async()=>{
