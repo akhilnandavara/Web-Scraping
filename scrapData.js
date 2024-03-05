@@ -5,6 +5,14 @@ const { RestaurantNames } = require('./dataSets/restaurantNames');
 
 const fuzzball = require('fuzzball');
 
+const fs = require('fs');
+const { MongoClient } = require('mongodb');
+
+const url = "mongodb+srv://akhiln1030:KvKjQWc598Qqa2iu@cluster0.nxojpdz.mongodb.net"
+
+// Create a new MongoClient
+const client = new MongoClient(url);
+
 
 // Entry point of the script
 exports.scrapRestaurantdata = async () => {
@@ -28,25 +36,17 @@ async function fetchCommonRestaurants(restaurantNames) {
 
         // Launch Puppeteer browser instance
         const browser = await puppeteer.launch({
-            args: [
-              "--disable-setuid-sandbox",
-              "--no-sandbox",
-              "--single-process",
-              "--no-zygote",
-            ],
-            executablePath:
-              process.env.NODE_ENV === "production"
-                ? process.env.PUPPETEER_EXECUTABLE_PATH
-                : puppeteer.executablePath(),
-                headless:"new",
-          });
+
+            headless: true, defaultViewport: {
+                width: 1920,
+                height: 1080
+
+            },
+        });
 
 
         console.log('after launching browser')
         const page = await browser.newPage();
-
-        await page.setViewport({ width: 1080, height: 1024 });
-
 
         // Iterate over restaurant names
         for (const restaurantName of restaurantNames) {
@@ -76,7 +76,7 @@ async function fetchCommonRestaurants(restaurantNames) {
                 }
                 retryCount = 0;
                 console.log('after getting urls...')
-                console.log("swiggyUrl",swiggyURL, zomatoURL, googleURL)
+                console.log("swiggyUrl", swiggyURL, zomatoURL, googleURL)
 
             } catch (error) {
                 console.error(`Error processing ${restaurantName}:`, error);
@@ -91,6 +91,29 @@ async function fetchCommonRestaurants(restaurantNames) {
     }
 }
 
+// Function to store screenshot in MongoDB
+
+// Function to store screenshot locally
+async function storeScreenshotLocally(page, restaurantName) {
+    try {
+        // Define the directory where you want to save the screenshots
+        const directory = '/mnt/screenshots'; // Example directory on Render.com Persistent Disk
+
+        // Create the directory if it doesn't exist
+        if (!fs.existsSync(directory)) {
+            fs.mkdirSync(directory, { recursive: true });
+        }
+
+        // Capture the screenshot using Puppeteer
+        const screenshotPath = `${directory}/${restaurantName}_screenshot.png`;
+        await page.screenshot({ path: screenshotPath });
+
+        console.log('Screenshot saved locally:', screenshotPath);
+    } catch (error) {
+        console.error('Error saving screenshot locally:', error);
+    }
+}
+
 
 
 // Function to get Swiggy URL for a restaurant
@@ -99,10 +122,13 @@ async function getSwiggyURL(page, restaurantName) {
         // Navigate to Swiggy's website
         await page.goto('https://www.swiggy.com/search');
         console.log("after going to swiggy website...")
+
         // Wait for the search input field to appear
-        // await page.waitForSelector('input[class="_2FkHZ"]', { timeout: 10000 });
+        await page.waitForSelector('input[class="_2FkHZ"]', { timeout: 10000 });
         delay(3000); // 2 seconds delay
         console.log("after going to swiggy page load...")
+        await storeScreenshotLocally(page, restaurantName)
+
 
         // Clear the search input field and type the restaurant name
         await page.$eval('input[class="_2FkHZ"]', inputField => inputField.value = '');
