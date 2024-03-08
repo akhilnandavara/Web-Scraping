@@ -37,6 +37,10 @@ async function fetchCommonRestaurants(restaurantNames) {
         // Launch Puppeteer browser instance
         const browser = await puppeteer.launch({
             headless: true,   
+            defaultViewport:{
+                width:1280,
+                height:800
+            },
             args: ['--no-sandbox', '--disable-setuid-sandbox'] // Optional arguments
 
         });
@@ -158,8 +162,8 @@ async function getZomatoURL(page, restaurantName, ua) {
         await page.goto('https://www.zomato.com/bangalore/delivery-in-shanti-nagar');
 
         // Wait for the search input field to appear
-        // await page.waitForSelector('input[class="sc-fxgLge jUPfKP"][placeholder="Search for restaurant, cuisine or a dish"]', { timeout: 10000 });
-        delay(2000); // 2 seconds delay
+        await page.waitForSelector('input[class="sc-fxgLge jUPfKP"][placeholder="Search for restaurant, cuisine or a dish"]', { timeout: 10000 });
+       
 
         // Clear the search input field and type the restaurant name
         await page.click('.sc-fxgLge.jUPfKP');
