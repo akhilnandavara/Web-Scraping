@@ -240,7 +240,7 @@ async function getGoogleURL(page, restaurantName) {
             return null;
         }
     } catch (error) {
-        console.error('Error getting Swiggy URL for', restaurantName, ':', error);
+        console.error('Error getting Google URL for', restaurantName, ':', error);
         return null;
     }
 }
