@@ -45,8 +45,7 @@ async function fetchCommonRestaurants(restaurantNames) {
         
         console.log('after launching browser')
         const page = await browser.newPage();
-        await page.setViewport({ width: 1200, height: 800 });
-
+      console.log(page.viewport())
         
         await page.evaluate(() => {
             document.documentElement.requestFullscreen();
@@ -128,7 +127,7 @@ async function getSwiggyURL(page, restaurantName) {
         console.log("after going to swiggy website...")
 
       
-    
+        console.log("swiggy",page.viewport())
 
         // Wait for the search input field to appear
         await page.waitForSelector('input[class="_2FkHZ"]', { timeout: 10000 });
@@ -168,7 +167,7 @@ async function getZomatoURL(page, restaurantName, ua) {
        
         await page.goto('https://www.zomato.com/bangalore/delivery-in-shanti-nagar');
 
-       
+        console.log("zomato",page.viewport())
     
         // Wait for the search input field to appear
         await page.waitForSelector('input[class="sc-fxgLge jUPfKP"][placeholder="Search for restaurant, cuisine or a dish"]', { timeout: 10000 });
@@ -203,6 +202,7 @@ async function getGoogleURL(page, restaurantName) {
         // Navigate to Swiggy's website
         await page.goto('https://www.google.co.in/maps/@12.962000,77.597038,15z?entry=ttu');
 
+        console.log("Google",page.viewport())
         // Wait for the search input field to appear
         await page.waitForSelector('input[class="searchboxinput xiQnY"]', { timeout: 10000 });
 
