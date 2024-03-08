@@ -36,14 +36,21 @@ async function fetchCommonRestaurants(restaurantNames) {
 
         // Launch Puppeteer browser instance
         const browser = await puppeteer.launch({
-            headless: true,   
+            headless: false,   
             args: ['--no-sandbox', '--disable-setuid-sandbox'] // Optional arguments
 
         });
 
-
+        
+        
         console.log('after launching browser')
         const page = await browser.newPage();
+        await page.setViewport({ width: 1200, height: 800 });
+
+        
+        await page.evaluate(() => {
+            document.documentElement.requestFullscreen();
+        });
 
         // Iterate over restaurant names
         for (const restaurantName of restaurantNames) {
@@ -73,7 +80,7 @@ async function fetchCommonRestaurants(restaurantNames) {
                 }
                 retryCount = 0;
                 console.log('after getting urls...')
-                console.log("swiggyUrl", swiggyURL, zomatoURL, googleURL)
+                console.log("swiggyUrl", swiggyURL, googleURL)
 
             } catch (error) {
                 console.error(`Error processing ${restaurantName}:`, error);
@@ -120,6 +127,9 @@ async function getSwiggyURL(page, restaurantName) {
         await page.goto('https://www.swiggy.com/search');
         console.log("after going to swiggy website...")
 
+      
+    
+
         // Wait for the search input field to appear
         await page.waitForSelector('input[class="_2FkHZ"]', { timeout: 10000 });
         delay(3000); // 2 seconds delay
@@ -148,7 +158,7 @@ async function getSwiggyURL(page, restaurantName) {
         console.error('Error getting Swiggy URL for', restaurantName, ':', error);
         return null;
     }
-}
+}  
 
 
 async function getZomatoURL(page, restaurantName, ua) {
@@ -158,6 +168,8 @@ async function getZomatoURL(page, restaurantName, ua) {
        
         await page.goto('https://www.zomato.com/bangalore/delivery-in-shanti-nagar');
 
+       
+    
         // Wait for the search input field to appear
         await page.waitForSelector('input[class="sc-fxgLge jUPfKP"][placeholder="Search for restaurant, cuisine or a dish"]', { timeout: 10000 });
        
