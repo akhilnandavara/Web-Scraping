@@ -36,12 +36,9 @@ async function fetchCommonRestaurants(restaurantNames) {
 
         // Launch Puppeteer browser instance
         const browser = await puppeteer.launch({
+            headless: true,   
+            args: ['--no-sandbox', '--disable-setuid-sandbox'] // Optional arguments
 
-            headless: true, defaultViewport: {
-                width: 1920,
-                height: 1080
-
-            },
         });
 
 
@@ -94,25 +91,25 @@ async function fetchCommonRestaurants(restaurantNames) {
 // Function to store screenshot in MongoDB
 
 // Function to store screenshot locally
-async function storeScreenshotLocally(page, restaurantName) {
-    try {
-        // Define the directory where you want to save the screenshots
-        const directory = '/mnt/screenshots'; // Example directory on Render.com Persistent Disk
+// async function storeScreenshotLocally(page, restaurantName) {
+//     try {
+//         // Define the directory where you want to save the screenshots
+//         const directory = '/mnt/screenshots'; // Example directory on Render.com Persistent Disk
 
-        // Create the directory if it doesn't exist
-        if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory, { recursive: true });
-        }
+//         // Create the directory if it doesn't exist
+//         if (!fs.existsSync(directory)) {
+//             fs.mkdirSync(directory, { recursive: true });
+//         }
 
-        // Capture the screenshot using Puppeteer
-        const screenshotPath = `${directory}/${restaurantName}_screenshot.png`;
-        await page.screenshot({ path: screenshotPath });
+//         // Capture the screenshot using Puppeteer
+//         const screenshotPath = `${directory}/${restaurantName}_screenshot.png`;
+//         await page.screenshot({ path: screenshotPath });
 
-        console.log('Screenshot saved locally:', screenshotPath);
-    } catch (error) {
-        console.error('Error saving screenshot locally:', error);
-    }
-}
+//         console.log('Screenshot saved locally:', screenshotPath);
+//     } catch (error) {
+//         console.error('Error saving screenshot locally:', error);
+//     }
+// }
 
 
 
@@ -127,7 +124,7 @@ async function getSwiggyURL(page, restaurantName) {
         await page.waitForSelector('input[class="_2FkHZ"]', { timeout: 10000 });
         delay(3000); // 2 seconds delay
         console.log("after going to swiggy page load...")
-        await storeScreenshotLocally(page, restaurantName)
+        // await storeScreenshotLocally(page, restaurantName)
 
 
         // Clear the search input field and type the restaurant name
@@ -187,7 +184,6 @@ async function getZomatoURL(page, restaurantName, ua) {
         return null;
     }
 }
-
 
 async function getGoogleURL(page, restaurantName) {
     try {
