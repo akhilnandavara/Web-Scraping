@@ -36,7 +36,7 @@ async function fetchCommonRestaurants(restaurantNames) {
 
         // Launch Puppeteer browser instance
         const browser = await puppeteer.launch({
-            headless: false,   
+            headless: true,   
             args: ['--no-sandbox', '--disable-setuid-sandbox'] // Optional arguments
 
         });
