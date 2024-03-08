@@ -45,7 +45,7 @@ async function fetchCommonRestaurants(restaurantNames) {
         
         console.log('after launching browser')
         const page = await browser.newPage();
-      console.log(page.viewport())
+
         
         await page.evaluate(() => {
             document.documentElement.requestFullscreen();
@@ -67,11 +67,11 @@ async function fetchCommonRestaurants(restaurantNames) {
                 }
                 retryCount = 0;
 
-                while (!zomatoURL && retryCount < maxRetries) {
-                    zomatoURL = await getZomatoURL(page, restaurantName, ua);
-                    retryCount++;
-                }
-                retryCount = 0;
+                // while (!zomatoURL && retryCount < maxRetries) {
+                //     zomatoURL = await getZomatoURL(page, restaurantName, ua);
+                //     retryCount++;
+                // }
+                // retryCount = 0;
 
                 while (!googleURL && retryCount < maxRetries) {
                     googleURL = await getGoogleURL(page, restaurantName, ua);
@@ -127,11 +127,11 @@ async function getSwiggyURL(page, restaurantName) {
         console.log("after going to swiggy website...")
 
       
-        console.log("swiggy",page.viewport())
+    
 
         // Wait for the search input field to appear
-        await page.waitForSelector('input[class="_2FkHZ"]', { timeout: 30000 });
-        // delay(3000); // 2 seconds delay
+        await page.waitForSelector('input[class="_2FkHZ"]', { timeout: 10000 });
+        delay(3000); // 2 seconds delay
         console.log("after going to swiggy page load...")
         // await storeScreenshotLocally(page, restaurantName)
 
@@ -167,10 +167,10 @@ async function getZomatoURL(page, restaurantName, ua) {
        
         await page.goto('https://www.zomato.com/bangalore/delivery-in-shanti-nagar');
 
-        console.log("zomato",page.viewport())
+       
     
         // Wait for the search input field to appear
-        await page.waitForSelector('input[class="sc-fxgLge jUPfKP"][placeholder="Search for restaurant, cuisine or a dish"]', { timeout: 30000 });
+        await page.waitForSelector('input[class="sc-fxgLge jUPfKP"][placeholder="Search for restaurant, cuisine or a dish"]', { timeout: 10000 });
        
 
         // Clear the search input field and type the restaurant name
@@ -182,8 +182,8 @@ async function getZomatoURL(page, restaurantName, ua) {
         await page.keyboard.press('Enter');
 
         // Wait for the search results to load
-        await page.waitForSelector('.sc-cAJUJo.gPwkty', { timeout: 30000 });
-        // await delay(2000); // 5 seconds delay
+        // await page.waitForSelector('.sc-cAJUJo.gPwkty', { timeout: 10000 });
+        await delay(2000); // 5 seconds delay
 
         // Click on the first search result
         await page.click('.sc-1kx5g6g-3.dkwpEa');
@@ -202,9 +202,8 @@ async function getGoogleURL(page, restaurantName) {
         // Navigate to Swiggy's website
         await page.goto('https://www.google.co.in/maps/@12.962000,77.597038,15z?entry=ttu');
 
-        console.log("Google",page.viewport())
         // Wait for the search input field to appear
-        await page.waitForSelector('input[class="searchboxinput xiQnY"]', { timeout: 30000 });
+        await page.waitForSelector('input[class="searchboxinput xiQnY"]', { timeout: 10000 });
 
         // Clear the search input field and type the restaurant name
         await page.$eval('input[class="searchboxinput xiQnY"]', inputField => inputField.value = '');
@@ -214,7 +213,7 @@ async function getGoogleURL(page, restaurantName) {
         await page.keyboard.press('Enter');
 
         // Wait for the search results to load
-        await page.waitForSelector('.Nv2PK.tH5CWc.THOPZb > a , .Nv2PK.THOPZb.CpccDe  > a', { timeout: 30000 });
+        await page.waitForSelector('.Nv2PK.tH5CWc.THOPZb > a , .Nv2PK.THOPZb.CpccDe  > a', { timeout: 10000 });
 
 
         // Extract the names of all search results
