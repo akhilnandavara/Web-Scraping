@@ -155,17 +155,7 @@ async function getZomatoURL(page, restaurantName, ua) {
     try {
         // Navigate to Zomato's website
         page.setUserAgent(ua);
-        page.setViewport({ width: 1366, height: 768 });
-        console.log("before going to zomato website...")
-        const { width, height } = await page.evaluate(() => {
-            return {
-                width: window.innerWidth,
-                height: window.innerHeight
-            };
-        });
-    
-        console.log('Viewport width:', width);
-        console.log('Viewport height:', height)
+       
         await page.goto('https://www.zomato.com/bangalore/delivery-in-shanti-nagar');
 
         // Wait for the search input field to appear
